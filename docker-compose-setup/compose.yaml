@@ -1,0 +1,47 @@
+---
+services:
+  chromadb:
+    image: chromadb/chroma:latest
+    container_name: chromadb
+    restart: unless-stopped
+    volumes:
+      - ./chromadb-data:/data
+    ports:
+      - 8000:8000
+    networks:
+      - genai_net
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    restart: unless-stopped
+    volumes:
+      - ./ollama:/root/.ollama
+    ports:
+      - 11434:11434
+    networks:
+      - genai_net
+  
+  vllm-xpu-llama3.2:
+    image: vllm-xpu-env:latest
+    container_name: vllm-xpu-llama3.2
+    command: "--model meta-llama/Llama-3.2-3B-Instruct --device xpu --max_model_len 30720 --tensor-parallel-size 1"
+    environment:
+      - HUGGING_FACE_HUB_TOKEN=${HUGGING_FACE_HUB_TOKEN}
+    restart: unless-stopped
+    volumes:
+      - /dev/dri/by-path:/dev/dri/by-path
+    devices:
+      - /dev/dri:/dev/dri
+    shm_size: 30G
+    ports:
+      - 8200:8000
+    networks:
+      - genai_net
+      
+
+networks:
+  genai_net:
+    name: genai_net
+    driver: bridge
+    external: true
