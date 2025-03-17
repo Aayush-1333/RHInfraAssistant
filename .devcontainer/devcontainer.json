@@ -1,0 +1,22 @@
+{
+    "name": "TelcoCloudAssist Devcontainer",
+    "image": "mcr.microsoft.com/vscode/devcontainers/python:3.12",
+    "customizations": {
+        "vscode": {
+            "settings": {
+                "python.pythonPath": "/usr/local/bin/python"
+            },
+            "extensions": [
+                "ms-python.python",
+                "ms-python.vscode-pylance",
+                "ms-toolsai.jupyter",
+                "Postman.postman-for-vscode",
+                "formulahendry.code-runner",
+                "tamasfe.even-better-toml",
+                "bierner.markdown-preview-github-styles"
+            ]
+        }
+    },
+    "postCreateCommand": "pip install uv && uv tool install crewai",
+    "remoteUser": "vscode"
+}

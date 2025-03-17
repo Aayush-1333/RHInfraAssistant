@@ -1,0 +1,104 @@
+RHOCP Low-Level Solution Design Document
+=====================================================
+
+Purpose
+--------
+
+This document has been produced to centrally capture the information which has been discussed during design workshop with the CUSTOMER team w.r.t. deployment of RHOCP & RHCS environments.
+
+Scope
+------
+
+The scope of this document is to describe the low-level design that Red Hat can offer and support by leveraging the Features provided by Red Hat Openshift Container Platform (RHOCP) & Red Hat Ceph Storage (RHCS).
+
+Master Nodes
+-------------
+
+### Nodes
+
+* 3 Master Nodes will be used for the RHOCP cluster.
+* Each Master Node will have the following components:
+	+ Bastion Node: 1 node with the latest RHEL 9.x Installed. Bastion node will be a virtual machine deployed on RHV.
+	+ Mirror Registry Node: 1 node with the latest RHEL 9.x Installed. Mirror Registry node will be a virtual machine deployed on a RHOSP.
+	+ Bootstrap Node: 1 node with the latest RHEL 9.x Installed. Bootstrap node will be a virtual machine deployed on RHV.
+	+ API Node: 1 node with the latest RHEL 9.x Installed. API node will be a virtual machine deployed on RHV.
+	+ Web Console Node: 1 node with the latest RHEL 9.x Installed. Web Console node will be a virtual machine deployed on RHV.
+
+### OS to Install
+
+* RHEL 9.x will be installed on all Master Nodes.
+
+### Network
+
+* Each Master Node will have a dedicated IP address and will be connected to the same subnet as the other Master Nodes.
+* The subnet mask will be /24.
+* The Master Nodes will be connected to the same L2 network using LACP bonding.
+* The Master Nodes will have a dedicated NIC for storage connectivity using iSCSI protocol.
+
+### Volume Configuration
+
+* Each Master Node will have a dedicated 512 GB storage device for the etcd database.
+* Each Master Node will have a dedicated 256 GB storage device for the Ceph Storage pool.
+* Each Master Node will have a dedicated 256 GB storage device for the OpenShift Container Platform data directory.
+
+Worker Nodes
+-------------
+
+### Nodes
+
+* 7 Worker Nodes will be used for the RHOCP cluster.
+* Each Worker Node will have the following components:
+	+ Compute Node: 1 node with the latest RHEL 9.x Installed. Compute node will be a virtual machine deployed on RHV.
+	+ Storage Node: 1 node with the latest RHEL 9.x Installed. Storage node will be a virtual machine deployed on RHV.
+
+### OS to Install
+
+* RHEL 9.x will be installed on all Worker Nodes.
+
+### Network
+
+* Each Worker Node will have a dedicated IP address and will be connected to the same subnet as the other Worker Nodes.
+* The subnet mask will be /24.
+* The Worker Nodes will be connected to the same L2 network using LACP bonding.
+* The Worker Nodes will have a dedicated NIC for storage connectivity using iSCSI protocol.
+
+### Volume Configuration
+
+* Each Worker Node will have a dedicated 1024 GB storage device for the Ceph Storage pool.
+* Each Worker Node will have a dedicated 512 GB storage device for the OpenShift Container Platform data directory.
+
+Network Configuration
+--------------------
+
+* The Master Nodes will have a dedicated IP address and will be connected to the same subnet as the other Master Nodes.
+* The subnet mask will be /24.
+* The Master Nodes will be connected to the same L2 network using LACP bonding.
+* The Master Nodes will have a dedicated NIC for storage connectivity using iSCSI protocol.
+* The Worker Nodes will have a dedicated IP address and will be connected to the same subnet as the other Worker Nodes.
+* The subnet mask will be /24.
+* The Worker Nodes will be connected to the same L2 network using LACP bonding.
+* The Worker Nodes will have a dedicated NIC for storage connectivity using iSCSI protocol.
+
+Installation Steps
+------------------
+
+* The Master Nodes will be provisioned using the Connected User Provisioned Installation (CUPI) method.
+* The Worker Nodes will be provisioned using the CUPI method.
+* The OpenShift Container Platform will be installed on the Master Nodes.
+* The Ceph Storage will be installed on the Master Nodes.
+* The etcd database will be installed on the Master Nodes.
+* The OpenShift Container Platform data directory will be installed on the Master Nodes.
+* The Worker Nodes will be configured to use the Ceph Storage pool.
+* The Worker Nodes will be configured to use the OpenShift Container Platform data directory.
+
+Security Considerations
+----------------------
+
+* The Master Nodes will be configured to use self-signed certificates for the OpenShift Container Platform.
+* The Worker Nodes will be configured to use self-signed certificates for the OpenShift Container Platform.
+* The etcd database will be encrypted.
+* The Ceph Storage pool will be encrypted.
+* The OpenShift Container Platform data directory will be encrypted.
+* The Master Nodes will be configured to use a secure password for the etcd database.
+* The Worker Nodes will be configured to use a secure password for the Ceph Storage pool.
+* The OpenShift Container Platform will be configured to use a secure password for the data directory.

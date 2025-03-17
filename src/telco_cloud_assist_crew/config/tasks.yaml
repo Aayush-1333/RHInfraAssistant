@@ -1,0 +1,36 @@
+plan_task:
+  description: >
+    Summarize the client's requirements given below:
+    {requirements}
+  expected_output: >
+    A summary of requirements in 2-3 sentences.
+  agent: planner
+
+design_task:
+  description: >
+    Review the context you got and pass it as string to `retrieve_chunks` 
+    tool in order to get relevant chunks for RHOCP deployment. Please
+    note that you need to pass the query as string. DO NOT pass in any other format
+    other than STRING.
+
+    After getting the chunks try to create a detailed summary of the data.
+  expected_output: >
+    A detailed summary with sections having detailed information for RHOCP deployment in enterprise environment
+    based on client's needs.
+  agent: designer
+
+write_task:
+  description: >
+    Review the context you got and try to create a detailed low-level solution
+    design document in markdown format having following sections:
+      1. Master Nodes (Nodes including bastion, mirror registry and boostrap nodes, OS to install, Network, Volume Configuration)
+      2. Worker Nodes (Nodes, OS to install, Network, Volumes Configuration)
+      3. Network Configuration (IP address, subnet mask)
+      4. Installation Steps
+      5. Security Considerations
+
+      Also try to consider this setup in an air-gapped environment.
+  expected_output: >
+    A fully fledged report with the main topics, each with a full section of information.
+    Formatted as markdown without '```'.
+  agent: writer
